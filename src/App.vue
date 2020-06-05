@@ -166,10 +166,53 @@
   }
 ]`;
 
-    const query = `
-SELECT *
-FROM tenk1 t1, tenk2 t2
-WHERE t1.unique1 < 10 AND t1.unique2 = t2.unique2;`;
+    const query = `select
+
+    allusglobal.id AS "id",
+    allusglobal.cuil AS "cuil",
+    allusglobal.tipo AS "tipo",
+    allusglobal.periodo AS "periodo",
+    allusglobal.sector AS "sector",
+    allusglobal.locacion AS "locacion",
+    allusglobal.firmado AS "firmado",
+    allusglobal.archivo AS "archivo",
+    allusglobal.idcarga AS "idcarga",
+    allusglobal.idkofax AS "idkofax",
+    allusglobal.md5 AS "md5",
+    allusglobal.bandeja AS "bandeja",
+    allusglobal.id_categoria_tipo_documento AS "id_categoria_tipo_documento",
+    allusglobal.nombre AS "nombre",
+    allusglobal.metadata AS "metadata",
+    allusglobal.id_master_eforms AS "id_master_eforms",
+    allusglobal.creation_date AS "creation_date",
+    allusglobal.sign_date AS "sign_date",
+    seg_usuario.nombre AS "usuario_nombre",
+    seg_usuario.apellido AS "usuario_apellido",
+    categoria_tipo_documento.nombre AS "tipo_nombre",
+    documento_firma.fecha AS "fecha_firma"
+FROM
+    allusglobal
+    LEFT JOIN seg_usuario ON (seg_usuario.cuil = allusglobal.cuil)
+        AND ((seg_usuario.idempresa = '150'))
+    LEFT JOIN categoria_tipo_documento ON (categoria_tipo_documento.id = allusglobal.id_categoria_tipo_documento)
+    INNER JOIN (
+        SELECT
+    documento_firma.iddoc AS "iddoc",
+    MAX(fecha) AS "fecha"
+FROM
+    documento_firma
+WHERE ((documento_firma.fecha BETWEEN CAST('2020-05-01 00:00:00' as timestamp(6))
+        AND CAST('2020-05-05 23:59:59' as timestamp(6))))
+AND ((documento_firma.idaplic = 375))
+GROUP BY documento_firma.iddoc
+
+    \t
+    )
+    \t
+    AS documento_firma ON (documento_firma.iddoc = allusglobal.id)
+WHERE ((allusglobal.id_categoria_tipo_documento IN (970, 971, 972, 973, 974))
+    AND (allusglobal.firmado IN ('FIRMADO CONFORME', 'FIRMADO DISCONFORME')))
+LIMIT 100 OFFSET 0;`;
 
     export default {
         name: "App",
