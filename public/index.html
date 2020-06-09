@@ -1,25 +1,80 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title>codesandbox</title>
-    <link href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet"
-    />
+    <meta charset="UTF-8">
+    <title>Log Query Grid</title>
+    <link href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js"></script>
 </head>
 <body>
+<!-- Begin page content -->
+<main role="main" class="container">
+    <div id="app">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Query</th>
+                <th>Tiempo de Ejecución</th>
+                <th>PEV</th>
+            </tr>
+            </thead>
+            <tr v-for="item in items">
+                <td>{{item["query"]}}</td>
+                <td>{{item["tiempo"]}}</td>
+                <td><a href="#">PEV</a></td>
+            </tr>
+        </table>
+    </div>
+</main>
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            items: [] // initialise to an empty array
+        },
+        created : function() {
+             this.getLogData().then(result => {
+                 console.log(result);
+                 this.items = result;
+             });
+        },
+        methods: {
+            getLogData: async function () {
+                //console.log("fdsfsdfds");
+                const res = await fetch('https://run.mocky.io/v3/61ba1695-0151-4a28-b857-b6bb60100c7e');
+                //console.log(res.json());
 
-<noscript>
-    <strong
-    >We're sorry but codesandbox doesn't work properly without JavaScript
-        enabled. Please enable it to continue.</strong
-    >
-</noscript>
-<div id="app"></div>
+                /*let res = [
+                    {
+                        query:"select * from ...",
+                        tiempo: "1500ms"
+                    },
+                    {
+                        query:"select * from ...",
+                        tiempo: "1500ms"
+                    },
+                    {
+                        query:"select * from ...",
+                        tiempo: "1500ms"
+                    }
+                ];
 
-<!-- built files will be auto injected -->
+                return res;*/
+
+                return res.json();
+
+                /*if (!res.ok) {
+                    throw res
+                }*/
+                /*var body = await res.json();
+                console.log(body);
+                this.data.items = body;*/
+                //await res.json();
+                //console.log(result);
+                //this.items = await res.body.json();// assign the response array to "items"
+            }
+      }
+    });
+</script>
 </body>
 </html>

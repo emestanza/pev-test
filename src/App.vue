@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="d-flex">
+    <div class="d-flex">
         <pev2 :plan-source="plan" :plan-query="query"></pev2>
     </div>
 </template>
