@@ -36,7 +36,7 @@
             </thead>
             <tr v-for="item in items" v-bind:key="item.id">
                 <td>{{item.query}}</td>
-                <td>{{item.tiempo}}</td>
+                <td><span class="badge badge-danger">{{item.tiempo}}</span></td>
                 <td>
                     <router-link :to="{ name: 'pev', params: {}}">PEV</router-link>
                 </td>
@@ -58,7 +58,8 @@
         },*/
         methods: {
             getLogData: async function (endpointSelected) {
-                const res = await fetch("https://run.mocky.io/v3/f7632241-39fc-4c9e-b427-b865fe2d6b83", {
+                //const res = await fetch("https://run.mocky.io/v3/f7632241-39fc-4c9e-b427-b865fe2d6b83", {
+                const res = await fetch("https://run.mocky.io/v3/676d80fc-9ec9-4c38-9323-672fc7de6a9f", {
                     method: 'GET',
                     headers: {
                         "Accept": "application/json"
